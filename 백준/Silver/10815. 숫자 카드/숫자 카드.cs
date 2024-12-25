@@ -25,8 +25,15 @@ namespace Beakjoon
             int N = int.Parse(sr.ReadLine());
 
             // 상근이가 가진 숫자 카드에 적혀있는 정수 입력
-            long[] Sang_geun_num_cards = new long[N];
-            Sang_geun_num_cards = sr.ReadLine().Split().Select(long.Parse).ToArray();
+            //long[] Sang_geun_num_cards = new long[N];
+            //Sang_geun_num_cards = sr.ReadLine().Split().Select(long.Parse).ToArray();
+            //HashSet 활용 버전
+            HashSet<int> Sang_geun_num_cards = new HashSet<int>(N);
+            long[] temp_num_cards = sr.ReadLine().Split().Select(long.Parse).ToArray();
+            foreach (int num in temp_num_cards)
+            {
+                Sang_geun_num_cards.Add(num);
+            }
 
             // M(소유 여부 확인 숫자 카드 갯수) 입력
             int M = int.Parse(sr.ReadLine());
@@ -34,6 +41,68 @@ namespace Beakjoon
             // 상근이가 가지고 있는 숫자 카드인지 구해야할 숫자 카드 입력
             long[] num_cards = new long[M];
             num_cards = sr.ReadLine().Split().Select(long.Parse).ToArray();
+
+            // v3 상근이가 가지고 있는 숫자 카드인지 아닌지를 계산
+            // HashSet 활용
+            foreach (int num in num_cards)
+            {
+                if (Sang_geun_num_cards.Contains(num))
+                {
+                    sw.Write("1 ");
+                }
+                else
+                {
+                    sw.Write("0 ");
+                }
+            }
+
+            //// v2 상근이가 가지고 있는 숫자 카드인지 아닌지를 계산
+            //// 이진탐색 구현, 낮은 시간복잡도
+            //// 근데도 시간 초과라네... -> string +=  출력 방식의 문제!
+            //Array.Sort(Sang_geun_num_cards);
+
+            //foreach (int num in num_cards)
+            //{
+            //    //직업 이진탐색. 이진 탐색을 위한 탐색 범위 index 설정
+            //    int first = 0;
+            //    int last = Sang_geun_num_cards.Length - 1;
+            //    int middle = (first + last) / 2;
+
+            //    while (true)
+            //    {
+            //        //이진 탐색
+            //        if (num < Sang_geun_num_cards[middle])
+            //        {
+            //            last = middle - 1; // middle이 아니었으니 -1
+            //            middle = (first + last) / 2;
+            //        }
+            //        else if (Sang_geun_num_cards[middle] < num)
+            //        {
+            //            first = middle + 1; // middle이 아니었으니 +1
+            //            middle = (first + last) / 2;
+            //        }
+            //        else // 탐색 성공
+            //        {
+            //            sw.Write("1 ");
+            //            break;
+            //        }
+            //        if (first > last) // 탐색 실패
+            //        {
+            //            sw.Write("0 ");
+            //            break;
+            //        }
+            //    }
+
+            //    // 이진탐색 메소드 사용
+            //    if (Array.BinarySearch(Sang_geun_num_cards, num) < 0)
+            //    {
+            //        result += "0 ";
+            //    }
+            //    else
+            //    {
+            //        result += "1 ";
+            //    }
+            //}
 
             //// v1 상근이가 가지고 있는 숫자 카드인지 아닌지를 계산
             //// Contains 순차탐색, 높은 시간복잡도
@@ -48,54 +117,6 @@ namespace Beakjoon
             //        result += "0 ";
             //    }
             //}
-
-            // v2 상근이가 가지고 있는 숫자 카드인지 아닌지를 계산
-            // 이진탐색 구현, 낮은 시간복잡도
-            // 근데도 시간 초과라네...
-            Array.Sort(Sang_geun_num_cards);
-
-            foreach (int num in num_cards)
-            {
-                //직업 이진탐색. 이진 탐색을 위한 탐색 범위 index 설정
-                int first = 0;
-                int last = Sang_geun_num_cards.Length - 1;
-                int middle = (first + last) / 2;
-
-                while (true)
-                {
-                    //이진 탐색
-                    if (num < Sang_geun_num_cards[middle])
-                    {
-                        last = middle - 1; // middle이 아니었으니 -1
-                        middle = (first + last) / 2;
-                    }
-                    else if (Sang_geun_num_cards[middle] < num)
-                    {
-                        first = middle + 1; // middle이 아니었으니 +1
-                        middle = (first + last) / 2;
-                    }
-                    else // 탐색 성공
-                    {
-                        sw.Write("1 ");
-                        break;
-                    }
-                    if (first > last) // 탐색 실패
-                    {
-                        sw.Write("0 ");
-                        break;
-                    }
-                }
-
-                //// 이진탐색 메소드 사용
-                //if(Array.BinarySearch(Sang_geun_num_cards, num) < 0)
-                //{
-                //    result += "0 ";
-                //}
-                //else
-                //{
-                //    result += "1 ";
-                //}
-            }
 
             // 입출력 스트림 닫기
             sw.Flush();
