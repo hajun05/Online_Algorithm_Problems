@@ -1,33 +1,18 @@
 using System;
 using System.Text;
+using System.Linq;
 
-public class Solution
+public class Solution 
 {
-    public string solution(string s, string skip, int index)
+    public string solution(string s, string skip, int index) 
     {
-        char azLen = (char)('z' - 'a' + 1);
         StringBuilder answer = new StringBuilder();
-        
-        for (int i = 0; i < s.Length; i++)
+        string a = new string("abcdefghijklmnopqrstuvwxyz".Where(x => !skip.Contains(x)).ToArray());
+        foreach(var t in s) 
         {
-            char a = s[i];
-            for (int j = 0; j < index; j++)
-            {
-                a++;
-                if (skip.Contains(a))
-                {
-                    j--;
-                    continue;
-                }
-                if (a > 'z')
-                {
-                    a -= azLen;
-                    if (skip.Contains(a))
-                        j--;
-                }
-            }
-            answer.Append(a);
+            answer.Append(a[(a.IndexOf(t.ToString()) + index)%a.Length]);
         }
+
         return answer.ToString();
     }
 }
