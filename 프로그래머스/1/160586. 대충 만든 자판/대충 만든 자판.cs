@@ -1,42 +1,38 @@
 using System;
+using System.Collections.Generic;
 
-public class Solution 
-{
+public class Solution {
     public int[] solution(string[] keymap, string[] targets) 
     {
-        int wordCount = targets.Length;
-        int[] answer = new int[wordCount];
-        
-        for (int i = 0; i < wordCount; i++)
+        // dictionary에 최소값으로 넣어줌
+        var dict = new Dictionary<char, int>();
+        for(int i = 0; i < keymap.Length; i++)
         {
-            answer[i] = -1;
-            string target = targets[i];
-            int wordLength = target.Length;
-            
-            for (int j = 0; j < wordLength; j++)
+            string keyStr = keymap[i];
+            for(int k = 0; k < keyStr.Length; k++)
             {
-                int minIndex = 101;
-                
-                foreach(string key in keymap)
-                {
-                    int index = key.IndexOf(target[j]);
-                    if (0 <= index && index < minIndex)
-                        minIndex = index;
-                }
-                
-                if (minIndex < 101)
-                    answer[i] += (minIndex + 1);
-                else
+                char c = keyStr[k];
+                dict[c] = dict.ContainsKey(c) ? Math.Min(k, dict[c]) : k;
+            }
+        }
+
+        // dictionary에서 검색 후 출력
+        int[] answer = new int[targets.Length];
+        for(int i = 0; i < targets.Length; i++)
+        {
+            string targetStr = targets[i];
+            for(int k = 0; k < targetStr.Length; k++)
+            {
+                if(!dict.TryGetValue(targetStr[k], out int index))
                 {
                     answer[i] = -1;
                     break;
                 }
+
+                answer[i] += index + 1;
             }
-            
-            if (answer[i] > -1)
-                answer[i] += 1;
         }
-        
+
         return answer;
     }
 }
